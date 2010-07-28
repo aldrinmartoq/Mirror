@@ -8,6 +8,7 @@
 
 #import "MirrorAppDelegate.h"
 #import "capture.h"
+#import <Carbon/Carbon.h>
 
 @implementation MirrorAppDelegate
 
@@ -29,6 +30,20 @@ static NSDictionary *textAttrs = nil;
 static NSUInteger oldMirrorWindowStyle = 0;
 static NSRect oldMirrorWindowFrame;
 
+static MirrorAppDelegate* appDelegate;
+
+OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void *userData) {
+	EventHotKeyID hkCom;
+	GetEventParameter(eventRef, kEventParamDirectObject, typeEventHotKeyID, NULL, sizeof(hkCom), NULL, &hkCom);
+	switch (hkCom.id) {
+		case 1:
+			[appDelegate toggleAppZoom];
+			break;
+	}
+	
+	return noErr;
+}
+
 + (void)initialize {
 	black = [[NSColor blackColor] retain];
 	white = [[NSColor whiteColor] retain];
@@ -44,7 +59,19 @@ static NSRect oldMirrorWindowFrame;
 				 textFont, NSFontAttributeName,
 				 textColor, NSForegroundColorAttributeName,
 				 style, NSParagraphStyleAttributeName,
-				 nil];	
+				 nil];
+	EventTypeSpec eventType;
+	eventType.eventClass = kEventClassKeyboard;
+	eventType.eventKind = kEventHotKeyPressed;
+	InstallApplicationEventHandler(&hotkeyHandler, 1, &eventType, NULL, NULL);
+	
+	EventHotKeyRef hotKeyRef;
+	EventHotKeyID hotKeyID;
+	
+	hotKeyID.signature='htk1';
+	hotKeyID.id = 1;
+	
+	RegisterEventHotKey(49, controlKey+optionKey+cmdKey, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef);
 }
 
 
@@ -54,24 +81,28 @@ static NSRect oldMirrorWindowFrame;
 	CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
 	NSPoint mousePos = [NSEvent mouseLocation];
 	NSUInteger mouseBut = [NSEvent pressedMouseButtons];
+	CGRect rect;
 	
-	if (zoomLevel > 0) {
-		captureRect.size.width = maindisplayBounds.size.width / zoomLevel;
-		captureRect.size.height = maindisplayBounds.size.height / zoomLevel;
-		if (mousePos.x < captureRect.origin.x)
-			captureRect.origin.x = mousePos.x;
-		if (mousePos.x > (captureRect.origin.x + captureRect.size.width))
-			captureRect.origin.x = mousePos.x - captureRect.size.width;
-		if (mousePos.y < captureRect.origin.y)
-			captureRect.origin.y = mousePos.y;
-		if (mousePos.y > (captureRect.origin.y + captureRect.size.height))
-			captureRect.origin.y = mousePos.y - captureRect.size.height;
+	if (currentAppTitle == nil) {
+		rect = maindisplayBounds;
 	} else {
-		captureRect = maindisplayBounds;
+		rect = captureRect;
+	}
+	if (zoomLevel > 0) {
+		rect.size.width = maindisplayBounds.size.width / zoomLevel;
+		rect.size.height = maindisplayBounds.size.height / zoomLevel;
+		if (mousePos.x < rect.origin.x)
+			rect.origin.x = mousePos.x;
+		if (mousePos.x > (rect.origin.x + rect.size.width))
+			rect.origin.x = mousePos.x - rect.size.width;
+		if (mousePos.y < rect.origin.y)
+			rect.origin.y = mousePos.y;
+		if (mousePos.y > (rect.origin.y + rect.size.height))
+			rect.origin.y = mousePos.y - rect.size.height;
 	}
 	
 	// capture screen image via OpenGL
-	CGImageRef imageRef = grabViaOpenGL(mainDisplay, captureRect);
+	CGImageRef imageRef = grabViaOpenGL(mainDisplay, rect);
 	
 	// convert and put into mirror image view
 	if (imageRef != NULL) {
@@ -86,8 +117,8 @@ static NSRect oldMirrorWindowFrame;
 		} else {
 			[red setFill];
 		}
-		CGFloat x = (mousePos.x - captureRect.origin.x - border / 2);
-		CGFloat y = mousePos.y - captureRect.origin.y - border / 2;
+		CGFloat x = (mousePos.x - rect.origin.x - border / 2);
+		CGFloat y = mousePos.y - rect.origin.y - border / 2;
 		
 		NSBezierPath *path = [NSBezierPath bezierPath];
 		[path appendBezierPathWithOvalInRect:NSMakeRect(x, y, border, border)];
@@ -103,6 +134,39 @@ static NSRect oldMirrorWindowFrame;
 	}
 	
 	CGImageRelease(imageRef);
+}
+
+- (void) toggleAppZoom {
+	if (currentAppTitle != nil) {
+		[currentAppTitle release];
+		currentAppTitle = nil;
+	} else {
+		CFArrayRef list = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
+		for (NSDictionary *entry in (NSArray *)list) {
+			NSString *winName = [entry valueForKey:(id)kCGWindowName];
+			NSString *appName = [entry valueForKey:(id)kCGWindowOwnerName];
+			NSLog(@"%@ \t %@", appName, winName);
+			if (winName != nil && ![winName isEqual:@""] && ![appName isEqual:@""] && ![appName isEqual:@"Window Server"] && ![appName isEqual:@"Dock"] && ![appName isEqual:@"Mirror"]) {
+				currentAppTitle = [appName retain];
+				CGDirectDisplayID mainDisplay = CGMainDisplayID();
+				CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
+				NSDictionary *bounds = [entry valueForKey:(id)kCGWindowBounds];
+				captureRect.size.width = [[bounds valueForKey:@"Width"] floatValue];
+				captureRect.size.height = [[bounds valueForKey:@"Height"] floatValue];
+				captureRect.origin.x = [[bounds valueForKey:@"X"] floatValue];
+				captureRect.origin.y = maindisplayBounds.size.height - [[bounds valueForKey:@"Y"] floatValue] - captureRect.size.height;
+				NSLog(@"capturerect: %@ %f %f", bounds, maindisplayBounds.size.height, captureRect.origin.y);
+				break;
+			}
+		}
+	}
+	if (currentAppTitle != nil) {
+		[mirrorImageDesktop setImageScaling:NSImageScaleProportionallyUpOrDown];
+	} else {
+		[mirrorImageDesktop setImageScaling:NSImageScaleAxesIndependently];
+	}
+	NSLog(@"Current App: %@", currentAppTitle);
+	[self drawFrame];
 }
 
 - (IBAction) updateApplicationList:(id)sender {
@@ -128,6 +192,11 @@ static NSRect oldMirrorWindowFrame;
 
 
 - (void)resetCaptureTimer {
+	
+	if (! [defaults boolForKey:@"capture"]) {
+		return;
+	}
+
 	int hztable[5] = {5,10,15,30,60};
 	NSInteger f = [defaults integerForKey:@"captureFrequency"];
 	if (f < 0 || f > 4) {
@@ -178,7 +247,7 @@ static NSRect oldMirrorWindowFrame;
 					fraction:0.8];
 	
 	// draw frame text
-	NSString *text = [defaults stringForKey:@"frameText"];
+	NSString *text = (currentAppTitle != nil ? currentAppTitle : [defaults stringForKey:@"frameText"]);
 	[text drawWithRect:NSMakeRect(border, (border - textSize) / 2, w - border * 2, 0)
 			   options:NSStringDrawingUsesLineFragmentOrigin
 			attributes:textAttrs];
@@ -262,6 +331,13 @@ static NSRect oldMirrorWindowFrame;
 	[self drawFrame];
 	[self checkCapturing];
 	[self checkZoom];
+	
+	appDelegate = self;
+	
+//	[NSEvent addGlobalMonitorForEventsMatchingMask:NSMouseMovedMask
+//										   handler:^(NSEvent *event){
+//											   NSLog(@"event: %@", event);
+//										   }];
 }
 
 @end

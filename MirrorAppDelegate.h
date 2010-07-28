@@ -23,6 +23,7 @@
 	CGRect windowBounds;
 	float zoomLevel;
 	CGRect captureRect;
+	NSString *currentAppTitle;
 }
 
 @property (retain) NSArray *windowList;
