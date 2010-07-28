@@ -11,7 +11,3 @@
 
 CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect);
 
-@interface capture : NSObject {
-}
-
-@end

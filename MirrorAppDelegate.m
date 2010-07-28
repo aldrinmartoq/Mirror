@@ -15,6 +15,8 @@
 
 static NSColor *black = nil;
 static NSColor *white = nil;
+static NSColor *gray = nil;
+static NSColor *red = nil;
 static NSImage *desktopImage = nil;
 
 static CGFloat border = 30.0;
@@ -30,6 +32,8 @@ static NSRect oldMirrorWindowFrame;
 + (void)initialize {
 	black = [[NSColor blackColor] retain];
 	white = [[NSColor whiteColor] retain];
+	gray = [[NSColor colorWithCalibratedWhite:0.7 alpha:0.4] retain];
+	red = [[NSColor redColor] retain];
 	desktopImage = [NSImage imageNamed:@"Desktop.png"];
 	
 	NSMutableParagraphStyle *style = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -44,57 +48,53 @@ static NSRect oldMirrorWindowFrame;
 }
 
 
-- (void) capture:(NSTimer*)timer {	
-	CGWindowListOption listOption = kCGWindowListOptionIncludingWindow; 
-	CGWindowImageOption imageOption = kCGWindowImageDefault;
-	if ([defaults boolForKey:@"ignoreFraming"]) {
-		imageOption |= kCGWindowImageBoundsIgnoreFraming;
+- (void) capture:(NSTimer*)timer {
+	// obtain display and shot sizes
+	CGDirectDisplayID mainDisplay = CGMainDisplayID();
+	CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
+	NSPoint mousePos = [NSEvent mouseLocation];
+	NSUInteger mouseBut = [NSEvent pressedMouseButtons];
+	
+	if (zoomLevel > 0) {
+		captureRect.size.width = maindisplayBounds.size.width / zoomLevel;
+		captureRect.size.height = maindisplayBounds.size.height / zoomLevel;
+		if (mousePos.x < captureRect.origin.x)
+			captureRect.origin.x = mousePos.x;
+		if (mousePos.x > (captureRect.origin.x + captureRect.size.width))
+			captureRect.origin.x = mousePos.x - captureRect.size.width;
+		if (mousePos.y < captureRect.origin.y)
+			captureRect.origin.y = mousePos.y;
+		if (mousePos.y > (captureRect.origin.y + captureRect.size.height))
+			captureRect.origin.y = mousePos.y - captureRect.size.height;
+	} else {
+		captureRect = maindisplayBounds;
 	}
-	if ([defaults boolForKey:@"includeWindowsAbove"]) {
-		listOption |= kCGWindowListOptionOnScreenAboveWindow;
-	}
 	
-//	CGImageRef imageRef = CGWindowListCreateImage(windowBounds, listOption, windowID, imageOption);
+	// capture screen image via OpenGL
+	CGImageRef imageRef = grabViaOpenGL(mainDisplay, captureRect);
 	
-	CGDirectDisplayID display = kCGNullDirectDisplay;
-	CGRect srcRect;
-	srcRect.origin.x = 0;
-	srcRect.origin.y = 0;
-	srcRect.size.width = 1680;
-	srcRect.size.height = 1050;
-	
-	CGImageRef imageRef = grabViaOpenGL(display, srcRect);
+	// convert and put into mirror image view
 	if (imageRef != NULL) {
 		NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithCGImage:imageRef];
 		
-		if (1) {
-			NSSize bitmapSize = [bitmap size];
-			NSScreen *mainScreen = [NSScreen mainScreen];
-			NSRect mainScreenFrame = [mainScreen frame];
-			NSPoint mouse = [NSEvent mouseLocation];
-			
-			[NSGraphicsContext saveGraphicsState];
-			[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:bitmap]];
-			
-			NSUInteger pressed = [NSEvent pressedMouseButtons];
-			if (pressed == 0) {
-				[[NSColor colorWithCalibratedWhite:0.7 alpha:0.4] setFill];
-			} else {
-				[[NSColor redColor] setFill];
-			}
-			NSRect rect;
-			rect.size.width = 40;
-			rect.size.height = 40;
-			rect.origin.x = (mouse.x - windowBounds.origin.x - rect.size.width / 2) * windowBounds.size.width / bitmapSize.width;
-			rect.origin.y = bitmapSize.height - (mainScreenFrame.size.height - mouse.y - windowBounds.origin.y + rect.size.height / 2) * windowBounds.size.height / bitmapSize.height;
-			
-			NSBezierPath *path = [NSBezierPath bezierPath];
-			[path appendBezierPathWithOvalInRect:rect];
-			
-			[path stroke];
-			[path fill];
-			[NSGraphicsContext restoreGraphicsState];
+		[NSGraphicsContext saveGraphicsState];
+		[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:bitmap]];
+		
+		// draw mouse circle
+		if (mouseBut == 0) {
+			[gray setFill];
+		} else {
+			[red setFill];
 		}
+		CGFloat x = (mousePos.x - captureRect.origin.x - border / 2);
+		CGFloat y = mousePos.y - captureRect.origin.y - border / 2;
+		
+		NSBezierPath *path = [NSBezierPath bezierPath];
+		[path appendBezierPathWithOvalInRect:NSMakeRect(x, y, border, border)];
+		[path stroke];
+		[path fill];
+		[NSGraphicsContext restoreGraphicsState];
+		
 		NSImage *image = [[NSImage alloc] init];
 		[image addRepresentation:bitmap];
 		[mirrorImageDesktop setImage:image];
@@ -127,8 +127,8 @@ static NSRect oldMirrorWindowFrame;
 }
 
 
-- (void)resetCapture {
-	int hztable[5] = {5,10,15,20,30};
+- (void)resetCaptureTimer {
+	int hztable[5] = {5,10,15,30,60};
 	NSInteger f = [defaults integerForKey:@"captureFrequency"];
 	if (f < 0 || f > 4) {
 		return;
@@ -146,24 +146,7 @@ static NSRect oldMirrorWindowFrame;
 	[[NSRunLoop currentRunLoop] addTimer:captureTimer forMode:NSDefaultRunLoopMode];	
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-					  ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqual:@"captureFrequency"]) {
-		[self resetCapture];
-	} else {
-		NSDictionary *entry = [object selection];
-		NSLog(@"selected: %@", entry);
-		NSNumber *winID = [entry valueForKey:@"kCGWindowNumber"];
-		NSDictionary *bounds = [entry valueForKey:@"kCGWindowBounds"];
-		if (winID != nil) {
-			windowID = [winID intValue];
-			windowBounds.origin.x = [[bounds valueForKey:@"X"] intValue];
-			windowBounds.origin.y = [[bounds valueForKey:@"Y"] intValue];
-			windowBounds.size.width = [[bounds valueForKey:@"Width"] intValue];
-			windowBounds.size.height = [[bounds valueForKey:@"Height"] intValue];
-		}
-	}
-}
+
 
 - (IBAction) toggleMirrorWindowStyle:(id)sender {
 	if ([mirrorWindow styleMask] == NSBorderlessWindowMask) {
@@ -195,7 +178,7 @@ static NSRect oldMirrorWindowFrame;
 					fraction:0.8];
 	
 	// draw frame text
-	NSString *text = [defaults stringForKey:@"defaultFrameText"];
+	NSString *text = [defaults stringForKey:@"frameText"];
 	[text drawWithRect:NSMakeRect(border, (border - textSize) / 2, w - border * 2, 0)
 			   options:NSStringDrawingUsesLineFragmentOrigin
 			attributes:textAttrs];
@@ -223,28 +206,62 @@ static NSRect oldMirrorWindowFrame;
 	NSLog(@"Did resize");
 }
 
+- (void) checkCapturing {
+	BOOL capture = [defaults boolForKey:@"capture"];
+	NSLog(@"capture: %d", capture);
+	if (capture) {
+		[self resetCaptureTimer];
+	} else {
+		[captureTimer invalidate];
+		[captureTimer release];
+		captureTimer = nil;
+		NSImage *image = [[NSImage alloc] init];
+		[mirrorImageDesktop setImage:image];
+	}
+}
+
+- (void) checkZoom {
+	if (! [defaults boolForKey:@"zoom"]) {
+		zoomLevel = 0.0;
+	} else {
+		zoomLevel = 1 + 0.5 * [defaults floatForKey:@"zoomLevel"];
+	}
+	NSLog(@"zoomLevel: %f", zoomLevel);
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqual:@"captureFrequency"]) {
+		[self resetCaptureTimer];
+	} else if ([keyPath isEqual:@"frameText"]) {
+		[self drawFrame];
+	} else if ([keyPath isEqual:@"capture"]) {
+		[self checkCapturing];
+	} else if ([keyPath isEqual:@"zoom"] || [keyPath isEqual:@"zoomLevel"]) {
+		[self checkZoom];
+	}
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 								 @"1", @"captureFrequency",
-								 @"NO", @"includeWindowsAbove",
-								 @"NO", @"ignoreFraming",
-								 @"Mirror by @aldrinmartoq", @"defaultFrameText",
+								 @"Mirror by @aldrinmartoq", @"frameText",
+								 @"NO", @"capture",
+								 @"NO", @"zoom",
+								 @"1", @"zoomLevel",
 								 nil];
 	defaults = [NSUserDefaults standardUserDefaults];
 	[defaults registerDefaults:appDefaults];
 	[defaults synchronize];
 	[defaults addObserver:self forKeyPath:@"captureFrequency" options:NSKeyValueObservingOptionNew context:NULL];
-	
-//	[mirrorWindow setBackgroundColor:[NSColor blackColor]];
-//	[mirrorWindow zoom:nil];
+	[defaults addObserver:self forKeyPath:@"frameText" options:NSKeyValueObservingOptionNew context:NULL];
+	[defaults addObserver:self forKeyPath:@"capture" options:NSKeyValueObservingOptionNew context:NULL];
+	[defaults addObserver:self forKeyPath:@"zoom" options:NSKeyValueObservingOptionNew context:NULL];
+	[defaults addObserver:self forKeyPath:@"zoomLevel" options:NSKeyValueObservingOptionNew context:NULL];
 
 	[self drawFrame];
-
-	[windowListController addObserver:self forKeyPath:@"selection" options:(NSKeyValueObservingOptionNew |
-																			NSKeyValueObservingOptionOld) context:NULL];
-	[self updateApplicationList:nil];
-	[self resetCapture];
+	[self checkCapturing];
+	[self checkZoom];
 }
 
 @end

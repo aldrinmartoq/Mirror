@@ -12,9 +12,7 @@
 	IBOutlet NSWindow *mirrorWindow;
 	IBOutlet NSImageView *mirrorImageFrame;
 	IBOutlet NSImageView *mirrorImageDesktop;
-	
-	IBOutlet NSArrayController *windowListController;
-	
+		
 	NSTimer *captureTimer;
 	NSTimer *winlistTimer;
 	
@@ -23,6 +21,8 @@
 	NSUserDefaults *defaults;
 	NSArray *frequencies;
 	CGRect windowBounds;
+	float zoomLevel;
+	CGRect captureRect;
 }
 
 @property (retain) NSArray *windowList;
