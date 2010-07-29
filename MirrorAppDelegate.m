@@ -20,7 +20,6 @@ static NSColor *gray = nil;
 static NSColor *red = nil;
 static NSImage *desktopImage = nil;
 
-static CGFloat border = 30.0;
 static CGFloat textSize = 20.0;
 
 static NSFont *textFont = nil;
@@ -51,15 +50,7 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	red = [[NSColor redColor] retain];
 	desktopImage = [NSImage imageNamed:@"Desktop.png"];
 	
-	NSMutableParagraphStyle *style = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-	[style setAlignment:NSCenterTextAlignment];
-	textFont = [[NSFont boldSystemFontOfSize:textSize] retain];
 	textColor = [[NSColor colorWithCalibratedWhite:1.0 alpha:0.8] retain];
-	textAttrs = [[NSDictionary alloc] initWithObjectsAndKeys:
-				 textFont, NSFontAttributeName,
-				 textColor, NSForegroundColorAttributeName,
-				 style, NSParagraphStyleAttributeName,
-				 nil];
 	EventTypeSpec eventType;
 	eventType.eventClass = kEventClassKeyboard;
 	eventType.eventKind = kEventHotKeyPressed;
@@ -137,29 +128,33 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 }
 
 - (void) toggleAppZoom {
-	if (currentAppTitle != nil) {
-		[currentAppTitle release];
-		currentAppTitle = nil;
-	} else {
-		CFArrayRef list = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
-		for (NSDictionary *entry in (NSArray *)list) {
-			NSString *winName = [entry valueForKey:(id)kCGWindowName];
-			NSString *appName = [entry valueForKey:(id)kCGWindowOwnerName];
-			NSLog(@"%@ \t %@", appName, winName);
-			if (winName != nil && ![winName isEqual:@""] && ![appName isEqual:@""] && ![appName isEqual:@"Window Server"] && ![appName isEqual:@"Dock"] && ![appName isEqual:@"Mirror"]) {
+	[currentAppTitle release];
+	currentAppTitle = nil;
+	NSPoint mousePos = [NSEvent mouseLocation];
+	CFArrayRef list = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
+	for (NSDictionary *entry in (NSArray *)list) {
+		NSString *winName = [entry valueForKey:(id)kCGWindowName];
+		NSString *appName = [entry valueForKey:(id)kCGWindowOwnerName];
+		NSDictionary *bounds = [entry valueForKey:(id)kCGWindowBounds];
+		NSLog(@"%@ \t %@ %f %f \t%@", appName, winName, mousePos.x, mousePos.y, bounds);
+		if (winName != nil && ![winName isEqual:@""] && ![appName isEqual:@""] && ![appName isEqual:@"Window Server"] && ![appName isEqual:@"Dock"] && ![appName isEqual:@"Mirror"]) {
+			CGDirectDisplayID mainDisplay = CGMainDisplayID();
+			CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
+			captureRect.size.width = [[bounds valueForKey:@"Width"] floatValue];
+			captureRect.size.height = [[bounds valueForKey:@"Height"] floatValue];
+			captureRect.origin.x = [[bounds valueForKey:@"X"] floatValue];
+			captureRect.origin.y = [[bounds valueForKey:@"Y"] floatValue];
+			captureRect.origin.y = maindisplayBounds.size.height - captureRect.origin.y - captureRect.size.height;
+			
+			if (mousePos.x >= captureRect.origin.x && mousePos.x <= (captureRect.origin.x + captureRect.size.width) &&
+				mousePos.y >= captureRect.origin.y && mousePos.y <= (captureRect.origin.y + captureRect.size.height)) {
 				currentAppTitle = [appName retain];
-				CGDirectDisplayID mainDisplay = CGMainDisplayID();
-				CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
-				NSDictionary *bounds = [entry valueForKey:(id)kCGWindowBounds];
-				captureRect.size.width = [[bounds valueForKey:@"Width"] floatValue];
-				captureRect.size.height = [[bounds valueForKey:@"Height"] floatValue];
-				captureRect.origin.x = [[bounds valueForKey:@"X"] floatValue];
-				captureRect.origin.y = maindisplayBounds.size.height - [[bounds valueForKey:@"Y"] floatValue] - captureRect.size.height;
 				NSLog(@"capturerect: %@ %f %f", bounds, maindisplayBounds.size.height, captureRect.origin.y);
 				break;
 			}
 		}
 	}
+	CFRelease(list);
 	if (currentAppTitle != nil) {
 		[mirrorImageDesktop setImageScaling:NSImageScaleProportionallyUpOrDown];
 	} else {
@@ -170,7 +165,7 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 }
 
 - (IBAction) updateApplicationList:(id)sender {
-//	self.windowList = (NSArray *)CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements, kCGNullWindowID);
+	//	self.windowList = (NSArray *)CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements, kCGNullWindowID);
 	
 	CFArrayRef list = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
 	NSMutableArray *arr = [NSMutableArray array];
@@ -183,7 +178,7 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 			[arr addObject:newEntry];
 		} else {
 			NSLog(@"omitted: %@", entry);
-//			NSLog(@"omitted: [%@]\t\t[%@]", appName, winName);
+			//			NSLog(@"omitted: [%@]\t\t[%@]", appName, winName);
 		}
 	}
 	CFRelease(list);
@@ -196,7 +191,7 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	if (! [defaults boolForKey:@"capture"]) {
 		return;
 	}
-
+	
 	int hztable[5] = {5,10,15,30,60};
 	NSInteger f = [defaults integerForKey:@"captureFrequency"];
 	if (f < 0 || f > 4) {
@@ -233,7 +228,7 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	NSRect frameBounds = [mirrorImageFrame frame];
 	CGFloat w = frameBounds.size.width;
 	CGFloat h = frameBounds.size.height;
-	NSImage *image = [[NSImage alloc] initWithSize:frameBounds.size];
+	NSImage *image = [[[NSImage alloc] initWithSize:frameBounds.size] autorelease];
 	[image lockFocus];
 	[[NSGraphicsContext currentContext] setImageInterpolation: NSImageInterpolationHigh];
 	
@@ -275,6 +270,23 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	NSLog(@"Did resize");
 }
 
+- (void) checkBorder {
+	border = [defaults floatForKey:@"border"];
+	textSize = border * 2 / 3;
+	NSLog(@"border: %f textSize: %f", border, textSize);
+	
+	NSMutableParagraphStyle *style = [[[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+	[style setAlignment:NSCenterTextAlignment];
+	textFont = [NSFont boldSystemFontOfSize:textSize];
+	textAttrs = [[NSDictionary alloc] initWithObjectsAndKeys:
+				 textFont, NSFontAttributeName,
+				 textColor, NSForegroundColorAttributeName,
+				 style, NSParagraphStyleAttributeName,
+				 nil];
+	
+	[self drawFrame];
+}
+
 - (void) checkCapturing {
 	BOOL capture = [defaults boolForKey:@"capture"];
 	NSLog(@"capture: %d", capture);
@@ -284,7 +296,7 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 		[captureTimer invalidate];
 		[captureTimer release];
 		captureTimer = nil;
-		NSImage *image = [[NSImage alloc] init];
+		NSImage *image = [[[NSImage alloc] init] autorelease];
 		[mirrorImageDesktop setImage:image];
 	}
 }
@@ -308,36 +320,38 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 		[self checkCapturing];
 	} else if ([keyPath isEqual:@"zoom"] || [keyPath isEqual:@"zoomLevel"]) {
 		[self checkZoom];
+	} else if ([keyPath isEqual:@"border"]) {
+		[self checkBorder];
 	}
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	// setup app defaults and observe them
 	NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 								 @"1", @"captureFrequency",
 								 @"Mirror by @aldrinmartoq", @"frameText",
 								 @"NO", @"capture",
 								 @"NO", @"zoom",
 								 @"1", @"zoomLevel",
+								 @"30", @"border",
 								 nil];
 	defaults = [NSUserDefaults standardUserDefaults];
 	[defaults registerDefaults:appDefaults];
 	[defaults synchronize];
-	[defaults addObserver:self forKeyPath:@"captureFrequency" options:NSKeyValueObservingOptionNew context:NULL];
-	[defaults addObserver:self forKeyPath:@"frameText" options:NSKeyValueObservingOptionNew context:NULL];
-	[defaults addObserver:self forKeyPath:@"capture" options:NSKeyValueObservingOptionNew context:NULL];
-	[defaults addObserver:self forKeyPath:@"zoom" options:NSKeyValueObservingOptionNew context:NULL];
-	[defaults addObserver:self forKeyPath:@"zoomLevel" options:NSKeyValueObservingOptionNew context:NULL];
-
-	[self drawFrame];
+	for (NSString *keyPath in appDefaults) {
+		[defaults addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
+	}
+	
+	// setup border, capturing, zoom, hotkey
+	[self checkBorder];
 	[self checkCapturing];
 	[self checkZoom];
-	
 	appDelegate = self;
 	
-//	[NSEvent addGlobalMonitorForEventsMatchingMask:NSMouseMovedMask
-//										   handler:^(NSEvent *event){
-//											   NSLog(@"event: %@", event);
-//										   }];
+	//	[NSEvent addGlobalMonitorForEventsMatchingMask:NSMouseMovedMask
+	//										   handler:^(NSEvent *event){
+	//											   NSLog(@"event: %@", event);
+	//										   }];
 }
 
 @end

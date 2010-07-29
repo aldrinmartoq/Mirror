@@ -85,9 +85,8 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     void *            data;
     long            bytewidth;
     GLint            width, height;
-    long            bytes;
-    CGColorSpaceRef cSpace = CGColorSpaceCreateWithName
-	(kCGColorSpaceGenericRGB);
+	//long            bytes;
+    CGColorSpaceRef cSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
 	
     CGLContextObj    glContextObj;
     CGLPixelFormatObj pixelFormatObj ;
@@ -106,12 +105,17 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
 	
     /* Build a full-screen GL context */
     CGLChoosePixelFormat( attribs, &pixelFormatObj, &numPixelFormats );
-    if ( pixelFormatObj == NULL )    // No full screen context support
+    if ( pixelFormatObj == NULL ) {
+		CFRelease(cSpace);
+		// No full screen context support
         return NULL;
+	}
     CGLCreateContext( pixelFormatObj, NULL, &glContextObj ) ;
     CGLDestroyPixelFormat( pixelFormatObj ) ;
-    if ( glContextObj == NULL )
+    if ( glContextObj == NULL ) {
+		CFRelease(cSpace);
         return NULL;
+	}
 	
     CGLSetCurrentContext( glContextObj ) ;
     CGLSetFullScreen( glContextObj ) ;
@@ -124,13 +128,14 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     height = srcRect.size.height;
 	
     bytewidth = width * 4;                // Assume 4 bytes/pixel for now
-		bytewidth = (bytewidth + 3) & ~3;    // Align to 4 bytes
-    bytes = bytewidth * height;            // width * height
+	bytewidth = (bytewidth + 3) & ~3;    // Align to 4 bytes
+    //bytes = bytewidth * height;            // width * height
 	
     /* Build bitmap context */
     data = malloc(height * bytewidth);
     if ( data == NULL )
     {
+		CFRelease(cSpace);
         CGLSetCurrentContext( NULL );
         CGLClearDrawable( glContextObj );    // disassociate from full screen
         CGLDestroyContext( glContextObj );    // and destroy the context
@@ -155,7 +160,7 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     glReadPixels((GLint)srcRect.origin.x, (GLint)srcRect.origin.y,
 				 width, height,
 				 GL_BGRA,
-//				 GL_UNSIGNED_INT_8_8_8_8_REV,
+				 //				 GL_UNSIGNED_INT_8_8_8_8_REV,
 				 GL_UNSIGNED_INT_8_8_8_8,
 				 data);
     /*

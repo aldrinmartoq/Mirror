@@ -23,6 +23,7 @@
 	CGRect windowBounds;
 	float zoomLevel;
 	CGRect captureRect;
+	float border;
 	NSString *currentAppTitle;
 }
 
@@ -30,5 +31,8 @@
 
 - (IBAction) updateApplicationList:(id)sender;
 - (IBAction) toggleMirrorWindowStyle:(id)sender;
+
+- (void) toggleAppZoom;
+- (void) drawFrame;
 
 @end
