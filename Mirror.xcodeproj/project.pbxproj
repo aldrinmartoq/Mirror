@@ -11,6 +11,7 @@
 		2002DEB411FF8107005F44A0 /* capture.m in Sources */ = {isa = PBXBuildFile; fileRef = 2002DEB311FF8107005F44A0 /* capture.m */; };
 		2002DECF11FF8306005F44A0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2002DECE11FF8306005F44A0 /* OpenGL.framework */; };
 		201A038A11FFEA7100203662 /* Desktop.png in Resources */ = {isa = PBXBuildFile; fileRef = 201A038911FFEA7100203662 /* Desktop.png */; };
+		209E2507120145690048F286 /* ChangeLog.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 209E2506120145690048F286 /* ChangeLog.rtf */; };
 		20C2FE7C11FEB90800A1EC68 /* Mirror.icns in Resources */ = {isa = PBXBuildFile; fileRef = 20C2FE7B11FEB90800A1EC68 /* Mirror.icns */; };
 		20C2FEC411FEC63000A1EC68 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 20C2FEC311FEC63000A1EC68 /* Credits.rtf */; };
 		20CE33FB12009A7900C9BC05 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20CE33FA12009A7900C9BC05 /* Carbon.framework */; };
@@ -29,6 +30,7 @@
 		2002DEB311FF8107005F44A0 /* capture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = capture.m; sourceTree = "<group>"; };
 		2002DECE11FF8306005F44A0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		201A038911FFEA7100203662 /* Desktop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Desktop.png; sourceTree = "<group>"; };
+		209E2506120145690048F286 /* ChangeLog.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = ChangeLog.rtf; sourceTree = "<group>"; };
 		20C2FE7B11FEB90800A1EC68 /* Mirror.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Mirror.icns; sourceTree = "<group>"; };
 		20C2FEC311FEC63000A1EC68 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		20CE33FA12009A7900C9BC05 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -125,6 +127,7 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				20C2FEC311FEC63000A1EC68 /* Credits.rtf */,
+				209E2506120145690048F286 /* ChangeLog.rtf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 				20C2FE7C11FEB90800A1EC68 /* Mirror.icns in Resources */,
 				20C2FEC411FEC63000A1EC68 /* Credits.rtf in Resources */,
 				201A038A11FFEA7100203662 /* Desktop.png in Resources */,
+				209E2507120145690048F286 /* ChangeLog.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
