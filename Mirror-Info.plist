@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9</string>
+	<string>0.9.1</string>
 	<key>CFBundleSignature</key>
 	<string>AGMA</string>
 	<key>CFBundleVersion</key>
-	<string>v2010072901</string>
+	<string>v2010080401</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSMainNibFile</key>
