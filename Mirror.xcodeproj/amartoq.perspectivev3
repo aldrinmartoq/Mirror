@@ -278,8 +278,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>12</integer>
-									<integer>9</integer>
+									<integer>23</integer>
+									<integer>22</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -301,7 +301,7 @@
 							<real>189</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>384 139 1101 746 0 0 1680 1028 </string>
+						<string>332 230 1101 746 0 0 1680 1028 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -317,7 +317,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>20C2FE7111FEB84700A1EC68</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Mirror-Info.plist</string>
+								<string>MirrorAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -325,11 +325,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>20C2FE7211FEB84700A1EC68</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Mirror-Info.plist</string>
+										<string>MirrorAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>20A7E87812093AA600B6D8BE</string>
+										<string>20A7E88D12093C2B00B6D8BE</string>
 										<key>history</key>
 										<array>
 											<string>20C2FEA311FEC4FE00A1EC68</string>
@@ -352,9 +352,9 @@
 											<string>20A7E7FB1209258000B6D8BE</string>
 											<string>20A7E7FD1209258000B6D8BE</string>
 											<string>20A7E82F120935BC00B6D8BE</string>
-											<string>20A7E87512093AA600B6D8BE</string>
 											<string>20A7E87612093AA600B6D8BE</string>
-											<string>20A7E87712093AA600B6D8BE</string>
+											<string>20A7E87F12093BBE00B6D8BE</string>
+											<string>20A7E88012093BBE00B6D8BE</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -370,7 +370,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {890, 471}}</string>
 								<key>RubberWindowFrame</key>
-								<string>384 139 1101 746 0 0 1680 1028 </string>
+								<string>332 230 1101 746 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -410,8 +410,6 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {890, 202}}</string>
-										<key>RubberWindowFrame</key>
-										<string>384 139 1101 746 0 0 1680 1028 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXProjectFindModule</string>
@@ -449,7 +447,9 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1056, 265}}</string>
+										<string>{{10, 27}, {890, 202}}</string>
+										<key>RubberWindowFrame</key>
+										<string>332 230 1101 746 0 0 1680 1028 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -673,13 +673,12 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>20A7E87912093AA600B6D8BE</string>
 		<string>20A7E79C120916F900B6D8BE</string>
 		<string>20A7E79D120916F900B6D8BE</string>
 		<string>/Users/amartoq/proj/Mac OS X/Mirror/Mirror.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>384 139 1101 746 0 0 1680 1028 </string>
+	<string>332 230 1101 746 0 0 1680 1028 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

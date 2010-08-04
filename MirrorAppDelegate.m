@@ -127,6 +127,11 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 		ay = (ay < ray ? ray : ay);
 		float bx = ax + w;
 		float by = ay + h;
+		bx = (bx > rbx ? rbx : bx);
+		by = (by > rby ? rby : by);
+		ax = bx - w;
+		ay = by - h;
+		
 		float max = mousePos.x - mouseSize;
 		float may = mousePos.y - mouseSize;
 		float mbx = mousePos.x + mouseSize;

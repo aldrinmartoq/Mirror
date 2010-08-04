@@ -208,7 +208,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 382";
 		rLen = 0;
-		rLoc = 13391;
+		rLoc = 13484;
 		rType = 0;
 		vrLen = 784;
 		vrLoc = 11528;
@@ -218,7 +218,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 383";
 		rLen = 0;
-		rLoc = 13290;
+		rLoc = 13383;
 		rType = 0;
 		vrLen = 1611;
 		vrLoc = 10669;
@@ -290,7 +290,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 383";
 		rLen = 0;
-		rLoc = 13290;
+		rLoc = 13383;
 		rType = 0;
 		vrLen = 1699;
 		vrLoc = 10635;
@@ -300,7 +300,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 382";
 		rLen = 0;
-		rLoc = 13290;
+		rLoc = 13383;
 		rType = 0;
 		vrLen = 1598;
 		vrLoc = 10676;
@@ -310,7 +310,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 130";
 		rLen = 0;
-		rLoc = 5503;
+		rLoc = 5596;
 		rType = 0;
 		vrLen = 607;
 		vrLoc = 2095;
@@ -320,7 +320,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 168";
 		rLen = 6;
-		rLoc = 6660;
+		rLoc = 6753;
 		rType = 0;
 		vrLen = 1266;
 		vrLoc = 4621;
@@ -330,7 +330,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 168";
 		rLen = 0;
-		rLoc = 6660;
+		rLoc = 6753;
 		rType = 0;
 		vrLen = 1499;
 		vrLoc = 4988;
@@ -340,7 +340,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 168";
 		rLen = 0;
-		rLoc = 6660;
+		rLoc = 6753;
 		rType = 0;
 		vrLen = 1088;
 		vrLoc = 7402;
@@ -350,7 +350,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 166";
 		rLen = 0;
-		rLoc = 6650;
+		rLoc = 6743;
 		rType = 0;
 		vrLen = 1256;
 		vrLoc = 4546;
@@ -360,7 +360,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 166";
 		rLen = 0;
-		rLoc = 6650;
+		rLoc = 6743;
 		rType = 0;
 		vrLen = 1256;
 		vrLoc = 4546;
@@ -370,7 +370,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 169";
 		rLen = 0;
-		rLoc = 6650;
+		rLoc = 6743;
 		rType = 0;
 		vrLen = 1354;
 		vrLoc = 2571;
@@ -380,7 +380,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 283";
 		rLen = 0;
-		rLoc = 10731;
+		rLoc = 10824;
 		rType = 0;
 		vrLen = 672;
 		vrLoc = 8543;
@@ -390,7 +390,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 287";
 		rLen = 0;
-		rLoc = 10731;
+		rLoc = 10824;
 		rType = 0;
 		vrLen = 1572;
 		vrLoc = 8175;
@@ -402,9 +402,9 @@
 		path = "/Users/amartoq/proj/Mac OS X/Mirror/MirrorAppDelegate.m";
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {829, 7228}}";
-			sepNavSelRange = "{4651, 0}";
-			sepNavVisRange = "{4439, 846}";
+			sepNavIntBoundsRect = "{{0, 0}, {1069, 7124}}";
+			sepNavSelRange = "{4309, 0}";
+			sepNavVisRange = "{0, 1379}";
 			sepNavWindowFrame = "{{613, 215}, {998, 763}}";
 		};
 	};
@@ -412,7 +412,7 @@
 		isa = PBXTextBookmark;
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		rLen = 0;
-		rLoc = 10731;
+		rLoc = 10824;
 		rType = 0;
 	};
 	20A7E7B712091BE300B6D8BE /* PBXTextBookmark */ = {
@@ -420,7 +420,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 287";
 		rLen = 0;
-		rLoc = 10731;
+		rLoc = 10824;
 		rType = 0;
 		vrLen = 1572;
 		vrLoc = 8175;
@@ -459,7 +459,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 301";
 		rLen = 0;
-		rLoc = 10725;
+		rLoc = 10818;
 		rType = 0;
 		vrLen = 725;
 		vrLoc = 8744;
@@ -469,7 +469,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 295";
 		rLen = 0;
-		rLoc = 10731;
+		rLoc = 10824;
 		rType = 0;
 		vrLen = 652;
 		vrLoc = 9004;
@@ -479,7 +479,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 383";
 		rLen = 0;
-		rLoc = 13371;
+		rLoc = 13464;
 		rType = 0;
 		vrLen = 814;
 		vrLoc = 11430;
@@ -499,7 +499,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 301";
 		rLen = 0;
-		rLoc = 10725;
+		rLoc = 10818;
 		rType = 0;
 		vrLen = 754;
 		vrLoc = 8744;
@@ -509,7 +509,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 383";
 		rLen = 0;
-		rLoc = 13388;
+		rLoc = 13481;
 		rType = 0;
 		vrLen = 814;
 		vrLoc = 11459;
@@ -529,7 +529,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 296";
 		rLen = 0;
-		rLoc = 10445;
+		rLoc = 10538;
 		rType = 0;
 		vrLen = 753;
 		vrLoc = 8744;
@@ -539,7 +539,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 383";
 		rLen = 0;
-		rLoc = 13388;
+		rLoc = 13481;
 		rType = 0;
 		vrLen = 814;
 		vrLoc = 11458;
@@ -559,7 +559,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 295";
 		rLen = 0;
-		rLoc = 10445;
+		rLoc = 10538;
 		rType = 0;
 		vrLen = 1612;
 		vrLoc = 8632;
@@ -625,7 +625,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 295";
 		rLen = 0;
-		rLoc = 10445;
+		rLoc = 10538;
 		rType = 0;
 		vrLen = 1580;
 		vrLoc = 8632;
@@ -747,7 +747,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 299";
 		rLen = 20;
-		rLoc = 10629;
+		rLoc = 10722;
 		rType = 0;
 		vrLen = 470;
 		vrLoc = 9102;
@@ -757,7 +757,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 463";
 		rLen = 0;
-		rLoc = 16056;
+		rLoc = 16149;
 		rType = 0;
 		vrLen = 649;
 		vrLoc = 14106;
@@ -777,7 +777,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 463";
 		rLen = 0;
-		rLoc = 16056;
+		rLoc = 16149;
 		rType = 0;
 		vrLen = 1164;
 		vrLoc = 13856;
@@ -797,7 +797,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 437";
 		rLen = 0;
-		rLoc = 14836;
+		rLoc = 14929;
 		rType = 0;
 		vrLen = 760;
 		vrLoc = 13033;
@@ -807,7 +807,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14773;
+		rLoc = 14866;
 		rType = 0;
 		vrLen = 913;
 		vrLoc = 13068;
@@ -817,7 +817,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14887;
 		rType = 0;
 		vrLen = 919;
 		vrLoc = 13068;
@@ -827,7 +827,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14887;
 		rType = 0;
 		vrLen = 919;
 		vrLoc = 13068;
@@ -837,7 +837,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14887;
 		rType = 0;
 		vrLen = 919;
 		vrLoc = 13068;
@@ -847,7 +847,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14887;
 		rType = 0;
 		vrLen = 891;
 		vrLoc = 13096;
@@ -857,7 +857,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14887;
 		rType = 0;
 		vrLen = 891;
 		vrLoc = 13096;
@@ -867,7 +867,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14887;
 		rType = 0;
 		vrLen = 901;
 		vrLoc = 13115;
@@ -877,7 +877,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 438";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14887;
 		rType = 0;
 		vrLen = 876;
 		vrLoc = 13068;
@@ -887,7 +887,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 473";
 		rLen = 0;
-		rLoc = 16046;
+		rLoc = 16139;
 		rType = 0;
 		vrLen = 438;
 		vrLoc = 15140;
@@ -928,7 +928,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 473";
 		rLen = 0;
-		rLoc = 16046;
+		rLoc = 16139;
 		rType = 0;
 		vrLen = 863;
 		vrLoc = 1318;
@@ -938,7 +938,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 151";
 		rLen = 0;
-		rLoc = 4766;
+		rLoc = 4859;
 		rType = 0;
 		vrLen = 763;
 		vrLoc = 3761;
@@ -948,7 +948,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 148";
 		rLen = 0;
-		rLoc = 4699;
+		rLoc = 4792;
 		rType = 0;
 		vrLen = 852;
 		vrLoc = 4416;
@@ -958,7 +958,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4721;
+		rLoc = 4814;
 		rType = 0;
 		vrLen = 910;
 		vrLoc = 4248;
@@ -968,7 +968,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 914;
 		vrLoc = 4248;
@@ -978,7 +978,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4739;
+		rLoc = 4832;
 		rType = 0;
 		vrLen = 914;
 		vrLoc = 4248;
@@ -988,7 +988,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 914;
 		vrLoc = 4248;
@@ -998,7 +998,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 148";
 		rLen = 0;
-		rLoc = 4699;
+		rLoc = 4792;
 		rType = 0;
 		vrLen = 914;
 		vrLoc = 4248;
@@ -1008,7 +1008,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 873;
 		vrLoc = 4248;
@@ -1018,7 +1018,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 873;
 		vrLoc = 4248;
@@ -1028,7 +1028,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 873;
 		vrLoc = 4248;
@@ -1038,7 +1038,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 907;
 		vrLoc = 4248;
@@ -1048,7 +1048,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 150";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 866;
 		vrLoc = 4248;
@@ -1058,7 +1058,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 157";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 1060;
 		vrLoc = 4764;
@@ -1068,7 +1068,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 151";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 862;
 		vrLoc = 5171;
@@ -1078,7 +1078,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 155";
 		rLen = 0;
-		rLoc = 4741;
+		rLoc = 4834;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 5382;
@@ -1088,7 +1088,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 148";
 		rLen = 0;
-		rLoc = 4699;
+		rLoc = 4792;
 		rType = 0;
 		vrLen = 488;
 		vrLoc = 4416;
@@ -1098,7 +1098,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 139";
 		rLen = 0;
-		rLoc = 4457;
+		rLoc = 4550;
 		rType = 0;
 		vrLen = 401;
 		vrLoc = 4255;
@@ -1108,7 +1108,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 139";
 		rLen = 0;
-		rLoc = 4457;
+		rLoc = 4550;
 		rType = 0;
 		vrLen = 872;
 		vrLoc = 4439;
@@ -1118,7 +1118,7 @@
 		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
 		name = "MirrorAppDelegate.m: 149";
 		rLen = 0;
-		rLoc = 4651;
+		rLoc = 4744;
 		rType = 0;
 		vrLen = 846;
 		vrLoc = 4439;
@@ -1155,6 +1155,47 @@
 		name = "/Users/amartoq/proj/Mac OS X/Mirror/Mirror-Info.plist";
 		rLen = 0;
 		rLoc = 9223372036854775807;
+	};
+	20A7E87F12093BBE00B6D8BE /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* Mirror-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = "/Users/amartoq/proj/Mac OS X/Mirror/Mirror-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	20A7E88012093BBE00B6D8BE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
+		name = "MirrorAppDelegate.m: 149";
+		rLen = 0;
+		rLoc = 4744;
+		rType = 0;
+		vrLen = 865;
+		vrLoc = 4423;
+	};
+	20A7E88112093BBE00B6D8BE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
+		name = "MirrorAppDelegate.m: 134";
+		rLen = 0;
+		rLoc = 4309;
+		rType = 0;
+		vrLen = 689;
+		vrLoc = 4063;
+	};
+	20A7E88D12093C2B00B6D8BE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 20A7E7B112091A7300B6D8BE /* MirrorAppDelegate.m */;
+		name = "MirrorAppDelegate.m: 134";
+		rLen = 0;
+		rLoc = 4309;
+		rType = 0;
+		vrLen = 1379;
+		vrLoc = 0;
 	};
 	20C2FE6C11FEB83300A1EC68 /* Mirror */ = {
 		isa = PBXExecutable;
@@ -1422,6 +1463,10 @@
 			20A7E87612093AA600B6D8BE /* PBXTextBookmark */ = 20A7E87612093AA600B6D8BE /* PBXTextBookmark */;
 			20A7E87712093AA600B6D8BE /* PlistBookmark */ = 20A7E87712093AA600B6D8BE /* PlistBookmark */;
 			20A7E87812093AA600B6D8BE /* PlistBookmark */ = 20A7E87812093AA600B6D8BE /* PlistBookmark */;
+			20A7E87F12093BBE00B6D8BE /* PlistBookmark */ = 20A7E87F12093BBE00B6D8BE /* PlistBookmark */;
+			20A7E88012093BBE00B6D8BE /* PBXTextBookmark */ = 20A7E88012093BBE00B6D8BE /* PBXTextBookmark */;
+			20A7E88112093BBE00B6D8BE /* PBXTextBookmark */ = 20A7E88112093BBE00B6D8BE /* PBXTextBookmark */;
+			20A7E88D12093C2B00B6D8BE /* PBXTextBookmark */ = 20A7E88D12093C2B00B6D8BE /* PBXTextBookmark */;
 			20C2FEA311FEC4FE00A1EC68 = 20C2FEA311FEC4FE00A1EC68 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 20C2FE7711FEB84800A1EC68 /* Source Control */;
