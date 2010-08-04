@@ -50,6 +50,11 @@
 	CGRect currentAppRect;
 	unsigned int captureCounter;
 	unsigned int captureFrequency;
+	
+	// zoom related
+	BOOL zoom;
+	float zoomlevel;
+	NSPoint zoomPoint;
 }
 
 - (void) toggleFollowCurrentApplication;

@@ -112,6 +112,52 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 		rect = CGDisplayBounds(mainDisplay);
 	}
 	
+	// zoom the capture rect
+	if (zoom) {
+		float rax = rect.origin.x;
+		float ray = rect.origin.y;
+		float rbx = rax + rect.size.width;
+		float rby = ray + rect.size.height;
+		
+		float w = rect.size.width / zoomlevel;
+		float h = rect.size.height / zoomlevel;
+		float ax = zoomPoint.x;
+		float ay = zoomPoint.y;
+		ax = (ax < rax ? rax : ax);
+		ay = (ay < ray ? ray : ay);
+		float bx = ax + w;
+		float by = ay + h;
+		float max = mousePos.x - mouseSize;
+		float may = mousePos.y - mouseSize;
+		float mbx = mousePos.x + mouseSize;
+		float mby = mousePos.y + mouseSize;
+		
+		if (max < ax) {
+			ax = (max < rax ? rax : max);
+			bx = ax + w;
+		}
+		if (may < ay) {
+			ay = (may < ray ? ray : may);
+			by = ay + h;
+		}
+		if (mbx > bx) {
+			bx = (mbx > rbx ? rbx : mbx);
+			ax = bx - w;
+		}
+		if (mby > by) {
+			by = (mby > rby ? rby : mby);
+			ay = by - h;
+		}
+		
+		zoomPoint.x = ax;
+		zoomPoint.y = ay;
+		rect.origin.x = ax;
+		rect.origin.y = ay;
+		rect.size.width = w;
+		rect.size.height = h;
+		NSLog(@"ax:%4.0f ay:%4.0f bx:%4.0f by:%4.0f h:%4.0f y:%4.0f", ax, ay, bx, by, h, rect.origin.y);
+	}
+	
 	// capture screen image via OpenGL
 	CGImageRef imageRef = grabViaOpenGL(mainDisplay, rect);
 	
@@ -428,6 +474,16 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 	}
 }
 
+- (void) applyChangesZoom {
+	zoom = [defaults boolForKey:@"zoom"];
+	NSLog(@"zoom %@ %1.1f x", (zoom ? @"YES":@"NO"), zoomlevel);
+}
+
+- (void) applyChangesZoomlevel {
+	zoomlevel = [defaults floatForKey:@"zoomlevel"];
+	NSLog(@"zoom %@ %1.1f x", (zoom ? @"YES":@"NO"), zoomlevel);
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqual:@"text"]) {
@@ -442,11 +498,15 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 		[self applyChangesFollow];
 	} else if ([keyPath isEqual:@"autoplace"]) {
 		[self applyChangesAutoplace];
+	} else if ([keyPath isEqual:@"zoom"]) {
+		[self applyChangesZoom];
+	} else if ([keyPath isEqual:@"zoomlevel"]) {
+		[self applyChangesZoomlevel];
 	}
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {	
-	// black listed apps
+	// setup blacklisted app names
 	blacklistedApps = [[NSArray arrayWithObjects:@"Mirror", @"Dock", @"Window Server", nil] retain];
 	
 	// setup app defaults and observe them
@@ -456,7 +516,7 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 								 @"NO", @"capture",
 								 @"1", @"frequency",
 								 @"NO", @"zoom",
-								 @"1", @"zoomLevel",
+								 @"1.5", @"zoomlevel",
 								 @"YES", @"autoplace",
 								 @"NO", @"follow",
 								 nil];
@@ -467,11 +527,15 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 		[defaults addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
 	}
 	
-	// setup border, capturing, zoom, hotkey
+	// setup everything from defaults
 	[self applyChangesAutoplace];
 	[self applyChangesFollow];
 	[self applyChangesBorder];
 	[self applyChangesCapture];
+	[self applyChangesZoom];
+	[self applyChangesZoomlevel];
+	
+	// setup carbon delegate
 	appDelegate = self;	
 }
 

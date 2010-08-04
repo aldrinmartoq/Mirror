@@ -12,9 +12,9 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="57"/>
 			<integer value="620"/>
 			<integer value="622"/>
-			<integer value="57"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1320,10 +1320,14 @@
 				<string key="NSClassName">NSFontManager</string>
 			</object>
 			<object class="NSUserDefaultsController" id="328633630">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>zoomlevel</string>
+				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="883935004">
-				<int key="NSWindowStyleMask">29</int>
+				<int key="NSWindowStyleMask">21</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{1060, 743}, {301, 285}}</string>
 				<int key="NSWTFlags">-1535639552</int>
@@ -1557,7 +1561,7 @@
 							<reference key="NSSuperview" ref="287479756"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="806965852">
-								<int key="NSCellFlags">-1543373312</int>
+								<int key="NSCellFlags">-2080244224</int>
 								<int key="NSCellFlags2">0</int>
 								<string key="NSContents">Zoom</string>
 								<reference key="NSSupport" ref="908739919"/>
@@ -1579,13 +1583,13 @@
 							<reference key="NSSuperview" ref="287479756"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSSliderCell" key="NSCell" id="736848843">
-								<int key="NSCellFlags">604110336</int>
+								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">0</int>
 								<string key="NSContents"/>
 								<reference key="NSControlView" ref="996317812"/>
-								<double key="NSMaxValue">5</double>
-								<double key="NSMinValue">1</double>
-								<double key="NSValue">1</double>
+								<double key="NSMaxValue">3.5</double>
+								<double key="NSMinValue">1.5</double>
+								<double key="NSValue">1.5</double>
 								<double key="NSAltIncValue">0.0</double>
 								<int key="NSNumberOfTickMarks">5</int>
 								<int key="NSTickMarkPosition">0</int>
@@ -1775,7 +1779,7 @@
 							<reference key="NSSuperview" ref="287479756"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="819317234">
-								<int key="NSCellFlags">-1543373312</int>
+								<int key="NSCellFlags">-2080244224</int>
 								<int key="NSCellFlags2">0</int>
 								<string key="NSContents">Auto place in secondary display</string>
 								<reference key="NSSupport" ref="908739919"/>
@@ -2626,22 +2630,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.zoomLevel</string>
-						<reference key="source" ref="996317812"/>
-						<reference key="destination" ref="328633630"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="996317812"/>
-							<reference key="NSDestination" ref="328633630"/>
-							<string key="NSLabel">value: values.zoomLevel</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.zoomLevel</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">743</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: values.border</string>
 						<reference key="source" ref="286519561"/>
 						<reference key="destination" ref="328633630"/>
@@ -2727,6 +2715,22 @@
 						<reference key="destination" ref="825912365"/>
 					</object>
 					<int key="connectionID">763</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.zoomlevel</string>
+						<reference key="source" ref="996317812"/>
+						<reference key="destination" ref="328633630"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="996317812"/>
+							<reference key="NSDestination" ref="328633630"/>
+							<string key="NSLabel">value: values.zoomlevel</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.zoomlevel</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">764</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4822,7 +4826,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">763</int>
+			<int key="maxID">764</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4830,17 +4834,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">MirrorAppDelegate</string>
 					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">toggleMirrorWindowStyle:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">toggleMirrorWindowStyle:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">toggleMirrorWindowStyle:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
