@@ -33,8 +33,6 @@
 
 @implementation MirrorAppDelegate
 
-@synthesize windowList;
-
 static NSColor *black = nil;
 static NSColor *white = nil;
 static NSColor *gray = nil;
@@ -42,12 +40,13 @@ static NSColor *red = nil;
 static NSImage *desktopImage = nil;
 
 static CGFloat textSize = 20.0;
-
+static CGFloat mouseSize = 25.0;
 static NSFont *textFont = nil;
 static NSColor *textColor = nil;
 static NSDictionary *textAttrs = nil;
 
 static NSUInteger oldMirrorWindowStyle = 0;
+static NSInteger oldMirrorWindowLevel = 0;
 static NSRect oldMirrorWindowFrame;
 
 static MirrorAppDelegate* appDelegate;
@@ -57,10 +56,15 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	GetEventParameter(eventRef, kEventParamDirectObject, typeEventHotKeyID, NULL, sizeof(hkCom), NULL, &hkCom);
 	switch (hkCom.id) {
 		case 1:
-			[appDelegate toggleAppZoom];
+			[appDelegate toggleFollowCurrentApplication];
 			break;
 	}
 	
+	return noErr;
+}
+
+OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef eventRef, void *userData) {
+	[appDelegate frontApplicationSwitched];
 	return noErr;
 }
 
@@ -68,7 +72,10 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	black = [[NSColor blackColor] retain];
 	white = [[NSColor whiteColor] retain];
 	gray = [[NSColor colorWithCalibratedWhite:0.7 alpha:0.4] retain];
-	red = [[NSColor redColor] retain];
+	red = [[NSColor colorWithCalibratedRed:1.0
+									 green:0.0
+									  blue:0.0
+									 alpha:0.6] retain];
 	desktopImage = [NSImage imageNamed:@"Desktop.png"];
 	
 	textColor = [[NSColor colorWithCalibratedWhite:1.0 alpha:0.8] retain];
@@ -84,33 +91,25 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	hotKeyID.id = 1;
 	
 	RegisterEventHotKey(49, controlKey+optionKey+cmdKey, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef);
+	
+	eventType.eventClass = kEventClassApplication;
+	eventType.eventKind = kEventAppFrontSwitched;
+	InstallApplicationEventHandler(NewEventHandlerUPP(appFrontSwitchedHandler), 1, &eventType, NULL, NULL);
 }
 
 
 - (void) capture:(NSTimer*)timer {
 	// obtain display and shot sizes
-	CGDirectDisplayID mainDisplay = CGMainDisplayID();
-	CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
 	NSPoint mousePos = [NSEvent mouseLocation];
 	NSUInteger mouseBut = [NSEvent pressedMouseButtons];
+	CGDirectDisplayID mainDisplay = CGMainDisplayID();
 	CGRect rect;
 	
-	if (currentAppTitle == nil) {
-		rect = maindisplayBounds;
+	// determine capture rect
+	if (follow && currentAppRect.size.width > 0 && currentAppRect.size.height > 0) {
+		rect = currentAppRect;
 	} else {
-		rect = captureRect;
-	}
-	if (zoomLevel > 0) {
-		rect.size.width = maindisplayBounds.size.width / zoomLevel;
-		rect.size.height = maindisplayBounds.size.height / zoomLevel;
-		if (mousePos.x < rect.origin.x)
-			rect.origin.x = mousePos.x;
-		if (mousePos.x > (rect.origin.x + rect.size.width))
-			rect.origin.x = mousePos.x - rect.size.width;
-		if (mousePos.y < rect.origin.y)
-			rect.origin.y = mousePos.y;
-		if (mousePos.y > (rect.origin.y + rect.size.height))
-			rect.origin.y = mousePos.y - rect.size.height;
+		rect = CGDisplayBounds(mainDisplay);
 	}
 	
 	// capture screen image via OpenGL
@@ -129,11 +128,10 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 		} else {
 			[red setFill];
 		}
-		CGFloat x = (mousePos.x - rect.origin.x - border / 2);
-		CGFloat y = mousePos.y - rect.origin.y - border / 2;
-		
+		CGFloat x = (mousePos.x - rect.origin.x - mouseSize / 2);
+		CGFloat y = mousePos.y - rect.origin.y - mouseSize / 2;
 		NSBezierPath *path = [NSBezierPath bezierPath];
-		[path appendBezierPathWithOvalInRect:NSMakeRect(x, y, border, border)];
+		[path appendBezierPathWithOvalInRect:NSMakeRect(x, y, mouseSize, mouseSize)];
 		[path stroke];
 		[path fill];
 		[NSGraphicsContext restoreGraphicsState];
@@ -146,84 +144,134 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	}
 	
 	CGImageRelease(imageRef);
-}
-
-- (void) toggleAppZoom {
-	[currentAppTitle release];
-	currentAppTitle = nil;
-	NSPoint mousePos = [NSEvent mouseLocation];
-	CFArrayRef list = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
-	for (NSDictionary *entry in (NSArray *)list) {
-		NSString *winName = [entry valueForKey:(id)kCGWindowName];
-		NSString *appName = [entry valueForKey:(id)kCGWindowOwnerName];
-		NSDictionary *bounds = [entry valueForKey:(id)kCGWindowBounds];
-		NSLog(@"%@ \t %@ %f %f \t%@", appName, winName, mousePos.x, mousePos.y, bounds);
-		if (winName != nil && ![winName isEqual:@""] && ![appName isEqual:@""] && ![appName isEqual:@"Window Server"] && ![appName isEqual:@"Dock"] && ![appName isEqual:@"Mirror"]) {
-			CGDirectDisplayID mainDisplay = CGMainDisplayID();
-			CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
-			captureRect.size.width = [[bounds valueForKey:@"Width"] floatValue];
-			captureRect.size.height = [[bounds valueForKey:@"Height"] floatValue];
-			captureRect.origin.x = [[bounds valueForKey:@"X"] floatValue];
-			captureRect.origin.y = [[bounds valueForKey:@"Y"] floatValue];
-			captureRect.origin.y = maindisplayBounds.size.height - captureRect.origin.y - captureRect.size.height;
-			
-			if (mousePos.x >= captureRect.origin.x && mousePos.x <= (captureRect.origin.x + captureRect.size.width) &&
-				mousePos.y >= captureRect.origin.y && mousePos.y <= (captureRect.origin.y + captureRect.size.height)) {
-				currentAppTitle = [appName retain];
-				NSLog(@"capturerect: %@ %f %f", bounds, maindisplayBounds.size.height, captureRect.origin.y);
-				break;
-			}
+	
+	if (follow) {
+		captureCounter++;
+		if (captureCounter > captureFrequency) {
+			captureCounter = 0;
+			[self followCurrentApplication];
 		}
 	}
-	CFRelease(list);
-	if (currentAppTitle != nil) {
+}
+
+- (void) toggleFollowCurrentApplication {
+	[defaults setObject:(follow ? @"NO" : @"YES") forKey:@"follow"];
+}
+
+- (void) frontApplicationSwitched {
+	NSDictionary *activeApp = [[NSWorkspace sharedWorkspace] activeApplication];
+	NSString *appName = [activeApp valueForKey:@"NSApplicationName"];
+	if ([blacklistedApps containsObject:appName]) {
+		NSLog(@"switched to app: %@ (blacklisted)", appName);
+	} else {
+		[currentAppName release];
+		currentAppName = [[activeApp valueForKey:@"NSApplicationName"] retain];
+		NSLog(@"switched to app: %@", currentAppName);
+		captureCounter = captureFrequency * 7/8;
+	}
+	if (follow) {
 		[mirrorImageDesktop setImageScaling:NSImageScaleProportionallyUpOrDown];
 	} else {
 		[mirrorImageDesktop setImageScaling:NSImageScaleAxesIndependently];
 	}
-	NSLog(@"Current App: %@", currentAppTitle);
-	[self drawFrame];
 }
 
-- (IBAction) updateApplicationList:(id)sender {
-	//	self.windowList = (NSArray *)CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements, kCGNullWindowID);
+- (void) followCurrentApplication {
+	/* assume main screen capture */ 
+	CGDirectDisplayID mainDisplay = CGMainDisplayID();
+	CGRect maindisplayBounds = CGDisplayBounds(mainDisplay);
 	
-	CFArrayRef list = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
-	NSMutableArray *arr = [NSMutableArray array];
-	for (NSDictionary *entry in (NSArray *)list) {
-		NSString *winName = [entry valueForKey:(id)kCGWindowName];
+	/* find biggest rect that contains all windows for current app */
+	CFArrayRef winList = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
+	NSPoint a, b;
+	BOOL found = NO;
+	for (NSDictionary *entry in (NSArray *)winList) {
+		// check app match current app name
 		NSString *appName = [entry valueForKey:(id)kCGWindowOwnerName];
-		if (winName != nil && ![winName isEqual:@""] && ![appName isEqual:@""]) {
-			NSMutableDictionary *newEntry = [NSMutableDictionary dictionaryWithDictionary:entry];
-			[newEntry setValue:[NSString stringWithFormat:@"%@/%@",appName,winName] forKey:(id)kCGWindowName];
-			[arr addObject:newEntry];
+		if ([blacklistedApps containsObject:appName]) {
+			continue;
+		}
+		// check win name is not empty
+		NSString *winName = [entry valueForKey:(id)kCGWindowName];
+		if (winName == nil || [winName length] == 0) {
+			continue;
+		}
+		// check there is no window over our app
+		if (![appName isEqual:currentAppName]) {
+			break;
+		}
+
+		
+		// retrieve window sizes
+		NSDictionary *bounds = [entry valueForKey:(id)kCGWindowBounds];
+		float w = [[bounds valueForKey:@"Width"] floatValue];
+		float h = [[bounds valueForKey:@"Height"] floatValue];
+		float ax = [[bounds valueForKey:@"X"] floatValue];
+		float ay = [[bounds valueForKey:@"Y"] floatValue];
+		float bx = ax + w;
+		float by = ay + h;
+		float max = maindisplayBounds.origin.x;
+		float may = maindisplayBounds.origin.y;
+		float mbx = max + maindisplayBounds.size.width;
+		float mby = may + maindisplayBounds.size.height;
+		
+		// skip windows outside mainscreen
+		if ((ax < max && bx < max) ||
+			(ax > mbx && bx > mbx) ||
+			(ay < may && by < may) ||
+			(ay > mby && by > mby)) {
+			continue;
+		}
+		ax = (ax < max ? max : ax);
+		ay = (ay < may ? may : ay);
+		bx = (bx > mbx ? mbx : bx);
+		by = (by > mby ? mby : by);
+				
+		// capture all known windows
+		if (! found) {
+			a.x = ax;
+			a.y = ay;
+			b.x = bx;
+			b.y = by;
+			found = YES;
 		} else {
-			NSLog(@"omitted: %@", entry);
-			//			NSLog(@"omitted: [%@]\t\t[%@]", appName, winName);
+			a.x = (ax < a.x ? ax : a.x);
+			a.y = (ay < a.y ? ay : a.y);
+			b.x = (bx > b.x ? bx : b.x);
+			b.y = (by > b.y ? by : b.y);
 		}
 	}
-	CFRelease(list);
-	self.windowList = arr;
+	
+	if (found) {
+		currentAppRect.origin.x = a.x;
+		currentAppRect.origin.y = maindisplayBounds.size.height - b.y;
+		currentAppRect.size.width = b.x - a.x;
+		currentAppRect.size.height = b.y - a.y;
+		[mirrorImageDesktop setImageScaling:NSImageScaleProportionallyUpOrDown];
+	} else {
+		currentAppRect = maindisplayBounds;
+		[mirrorImageDesktop setImageScaling:NSImageScaleAxesIndependently];
+	}
+	CFRelease(winList);
 }
 
-
-- (void)resetCaptureTimer {
-	
+- (void)applyChangesFrequency {
 	if (! [defaults boolForKey:@"capture"]) {
 		return;
 	}
 	
-	int hztable[5] = {5,10,15,30,60};
-	NSInteger f = [defaults integerForKey:@"captureFrequency"];
+	int hztable[5] = {5,10,15,20,24};
+	NSInteger f = [defaults integerForKey:@"frequency"];
 	if (f < 0 || f > 4) {
 		return;
 	}
-	int hz = hztable[f];
-	NSLog(@"CAPTURE FREQUENCY: %d Hz", hz);
+	captureFrequency = hztable[f];
+	NSLog(@"CAPTURE FREQUENCY: %d Hz", captureFrequency);
 	
+	captureCounter = 0;
 	[captureTimer invalidate];
 	captureTimer = [[NSTimer alloc] initWithFireDate:[NSDate date]
-											interval:1.0/hz
+											interval:1.0/captureFrequency
 											  target:self
 											selector:@selector(capture:)
 											userInfo:nil
@@ -232,17 +280,29 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 }
 
 
-
-- (IBAction) toggleMirrorWindowStyle:(id)sender {
-	if ([mirrorWindow styleMask] == NSBorderlessWindowMask) {
-		[mirrorWindow setStyleMask:oldMirrorWindowStyle];
-		[mirrorWindow setFrame:oldMirrorWindowFrame display:YES animate:NO];
-	} else {
+- (void) mirrorWindowMoveToSecondaryDisplay:(CGRect)d {
+	if (![mirrorWindow styleMask] != NSBorderlessWindowMask) {
 		oldMirrorWindowStyle = [mirrorWindow styleMask];
 		oldMirrorWindowFrame = [mirrorWindow frame];
 		[mirrorWindow setStyleMask:NSBorderlessWindowMask];
-		[mirrorWindow setFrame:oldMirrorWindowFrame display:YES animate:YES];
+		[mirrorWindow setFrame:NSMakeRect(d.origin.x, d.origin.y, d.size.width, d.size.height)
+					   display:YES
+					   animate:YES];
+		[mirrorWindow setCanHide:NO];
+		// this should avoid exposé on this window
+		[mirrorWindow setLevel:kCGDesktopWindowLevelKey]; 
 	}
+}
+
+- (void) mirrorWindowRestore {
+	if ([mirrorWindow styleMask] == NSBorderlessWindowMask) {
+		[mirrorWindow setLevel:oldMirrorWindowLevel];
+		[mirrorWindow setStyleMask:oldMirrorWindowStyle];
+		[mirrorWindow setFrame:oldMirrorWindowFrame
+					   display:YES
+					   animate:YES];
+		[mirrorWindow setCanHide:YES];
+	}	
 }
 
 - (void) drawFrame {
@@ -263,7 +323,7 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 					fraction:0.8];
 	
 	// draw frame text
-	NSString *text = (currentAppTitle != nil ? currentAppTitle : [defaults stringForKey:@"frameText"]);
+	NSString *text = [defaults stringForKey:@"text"];
 	[text drawWithRect:NSMakeRect(border, (border - textSize) / 2, w - border * 2, 0)
 			   options:NSStringDrawingUsesLineFragmentOrigin
 			attributes:textAttrs];
@@ -291,7 +351,49 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	NSLog(@"Did resize");
 }
 
-- (void) checkBorder {
+- (void) applyChangesAutoplace {
+	[buttonAutoplace setEnabled:NO];
+	
+	CGError err = CGDisplayNoErr;
+	CGDisplayCount displayCount = 0;
+	
+	err = CGGetActiveDisplayList(0, NULL, &displayCount);
+	if (err != CGDisplayNoErr || displayCount <= 1) {
+		NSLog(@"Error or displaycount: %d %d", err, displayCount);
+		[self mirrorWindowRestore];
+		return;
+	}
+
+	[buttonAutoplace setEnabled:YES];
+	
+	if (![defaults boolForKey:@"autoplace"]) {
+		NSLog(@"Disabling autoplace...");
+		[self mirrorWindowRestore];
+		return;
+	}
+	
+	CGDirectDisplayID displays[displayCount];
+	err = CGGetActiveDisplayList(displayCount, displays, &displayCount);
+	if (err != CGDisplayNoErr) return;
+	CGDirectDisplayID mainDisplayID = CGMainDisplayID();
+	for (int i = 0; i < displayCount; i++) {
+		NSLog(@"display: %d", displays[i]);
+		if (displays[i] == mainDisplayID) continue;
+		CGRect d = CGDisplayBounds(displays[i]);
+		CGRect m = CGDisplayBounds(mainDisplayID);
+		d.origin.y = m.size.height - d.size.height;
+		NSLog(@"Enabling autoplace on secondary display %d x: %f y: %f w: %f h: %f", displays[i], d.origin.x, d.origin.y, d.size.width, d.size.height);
+		[self mirrorWindowMoveToSecondaryDisplay:d];
+	}
+}
+
+- (void) applyChangesFollow {
+	follow = [defaults boolForKey:@"follow"];
+	[self frontApplicationSwitched];
+	NSLog(@"follow: %d black list: %@", follow, blacklistedApps);
+}
+
+- (void) applyChangesBorder {
 	border = [defaults floatForKey:@"border"];
 	textSize = border * 2 / 3;
 	NSLog(@"border: %f textSize: %f", border, textSize);
@@ -308,11 +410,15 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	[self drawFrame];
 }
 
-- (void) checkCapturing {
+- (void) applyChangesText {
+	[self drawFrame];
+}
+
+- (void) applyChangesCapture {
 	BOOL capture = [defaults boolForKey:@"capture"];
 	NSLog(@"capture: %d", capture);
 	if (capture) {
-		[self resetCaptureTimer];
+		[self applyChangesFrequency];
 	} else {
 		[captureTimer invalidate];
 		[captureTimer release];
@@ -322,39 +428,37 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	}
 }
 
-- (void) checkZoom {
-	if (! [defaults boolForKey:@"zoom"]) {
-		zoomLevel = 0.0;
-	} else {
-		zoomLevel = 1 + 0.5 * [defaults floatForKey:@"zoomLevel"];
-	}
-	NSLog(@"zoomLevel: %f", zoomLevel);
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqual:@"captureFrequency"]) {
-		[self resetCaptureTimer];
-	} else if ([keyPath isEqual:@"frameText"]) {
-		[self drawFrame];
-	} else if ([keyPath isEqual:@"capture"]) {
-		[self checkCapturing];
-	} else if ([keyPath isEqual:@"zoom"] || [keyPath isEqual:@"zoomLevel"]) {
-		[self checkZoom];
+	if ([keyPath isEqual:@"text"]) {
+		[self applyChangesText];
 	} else if ([keyPath isEqual:@"border"]) {
-		[self checkBorder];
+		[self applyChangesBorder];
+	} else if ([keyPath isEqual:@"capture"]) {
+		[self applyChangesCapture];
+	} else if ([keyPath isEqual:@"frequency"]) {
+		[self applyChangesFrequency];
+	} else if ([keyPath isEqual:@"follow"]) {
+		[self applyChangesFollow];
+	} else if ([keyPath isEqual:@"autoplace"]) {
+		[self applyChangesAutoplace];
 	}
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {	
+	// black listed apps
+	blacklistedApps = [[NSArray arrayWithObjects:@"Mirror", @"Dock", @"Window Server", nil] retain];
+	
 	// setup app defaults and observe them
 	NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-								 @"1", @"captureFrequency",
-								 @"Mirror by @aldrinmartoq", @"frameText",
+								 @"Mirror by @aldrinmartoq", @"text",
+								 @"30", @"border",
 								 @"NO", @"capture",
+								 @"1", @"frequency",
 								 @"NO", @"zoom",
 								 @"1", @"zoomLevel",
-								 @"30", @"border",
+								 @"YES", @"autoplace",
+								 @"NO", @"follow",
 								 nil];
 	defaults = [NSUserDefaults standardUserDefaults];
 	[defaults registerDefaults:appDefaults];
@@ -364,15 +468,11 @@ OSStatus hotkeyHandler(EventHandlerCallRef nextHandler, EventRef eventRef, void 
 	}
 	
 	// setup border, capturing, zoom, hotkey
-	[self checkBorder];
-	[self checkCapturing];
-	[self checkZoom];
-	appDelegate = self;
-	
-	//	[NSEvent addGlobalMonitorForEventsMatchingMask:NSMouseMovedMask
-	//										   handler:^(NSEvent *event){
-	//											   NSLog(@"event: %@", event);
-	//										   }];
+	[self applyChangesAutoplace];
+	[self applyChangesFollow];
+	[self applyChangesBorder];
+	[self applyChangesCapture];
+	appDelegate = self;	
 }
 
 @end

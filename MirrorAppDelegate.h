@@ -30,30 +30,31 @@
 #import <Cocoa/Cocoa.h>
 
 @interface MirrorAppDelegate : NSObject <NSApplicationDelegate> {
+	// user interface
 	IBOutlet NSWindow *mirrorWindow;
 	IBOutlet NSImageView *mirrorImageFrame;
 	IBOutlet NSImageView *mirrorImageDesktop;
+	IBOutlet NSButton *buttonAutoplace;
 	
+	// internals
 	NSTimer *captureTimer;
-	NSTimer *winlistTimer;
-	
-	NSArray *windowList;
-	CGWindowID windowID;
 	NSUserDefaults *defaults;
-	NSArray *frequencies;
-	CGRect windowBounds;
-	float zoomLevel;
-	CGRect captureRect;
+	
+	// preferences related
 	float border;
-	NSString *currentAppTitle;
+	BOOL follow;
+	
+	// follow related
+	NSArray *blacklistedApps;
+	NSString *currentAppName;
+	CGRect currentAppRect;
+	unsigned int captureCounter;
+	unsigned int captureFrequency;
 }
 
-@property (retain) NSArray *windowList;
-
-- (IBAction) updateApplicationList:(id)sender;
-- (IBAction) toggleMirrorWindowStyle:(id)sender;
-
-- (void) toggleAppZoom;
+- (void) toggleFollowCurrentApplication;
+- (void) frontApplicationSwitched;
 - (void) drawFrame;
+- (void) followCurrentApplication;
 
 @end
