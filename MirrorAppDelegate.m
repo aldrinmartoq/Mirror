@@ -332,7 +332,7 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 
 
 - (void) mirrorWindowMoveToSecondaryDisplay:(CGRect)d {
-	if (![mirrorWindow styleMask] != NSBorderlessWindowMask) {
+	if ([mirrorWindow styleMask] != NSBorderlessWindowMask) {
 		oldMirrorWindowStyle = [mirrorWindow styleMask];
 		oldMirrorWindowFrame = [mirrorWindow frame];
 		[mirrorWindow setStyleMask:NSBorderlessWindowMask];
@@ -340,8 +340,8 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 					   display:YES
 					   animate:YES];
 		[mirrorWindow setCanHide:NO];
-		// this should avoid exposé on this window
-		[mirrorWindow setLevel:kCGDesktopWindowLevelKey]; 
+		// this should avoid exposé on this window; UPDATE: it does not work :(
+		[mirrorWindow setLevel:kCGDesktopWindowLevel];
 	}
 }
 
