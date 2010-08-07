@@ -220,9 +220,7 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 		NSLog(@"switched to app: %@", currentAppName);
 		captureCounter = captureFrequency * 7/8;
 	}
-	if (follow) {
-		[mirrorImageDesktop setImageScaling:NSImageScaleProportionallyUpOrDown];
-	} else {
+	if (!follow) {
 		[mirrorImageDesktop setImageScaling:NSImageScaleAxesIndependently];
 	}
 }
