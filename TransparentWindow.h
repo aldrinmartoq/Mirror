@@ -1,8 +1,8 @@
 //
-//  MirrorAppDelegate.h
+//  TransparentWindow.h
 //  Mirror
 //
-//  Created by Aldrin Martoq on 7/27/10.
+//  Created by Aldrin Martoq on 8/10/10.
 //  Copyright 2010 Aldrin Martoq. Source code licensed under the "MIT" License.
 //
 /*
@@ -28,40 +28,19 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "TransparentWindow.h"
 
-@interface MirrorAppDelegate : NSObject <NSApplicationDelegate> {
-	// user interface
-	IBOutlet NSWindow *mirrorWindow;
-	IBOutlet NSImageView *mirrorImageFrame;
-	IBOutlet NSImageView *mirrorImageDesktop;
-	IBOutlet NSButton *buttonAutoplace;
-	TransparentWindow *transparentWindow;
-	
-	// internals
-	NSTimer *captureTimer;
-	NSUserDefaults *defaults;
-	
-	// preferences related
-	float border;
-	BOOL follow;
-	
-	// follow related
-	NSArray *blacklistedApps;
-	NSString *currentAppName;
-	CGRect currentAppRect;
-	unsigned int captureCounter;
-	unsigned int captureFrequency;
-	
-	// zoom related
-	BOOL zoom;
-	float zoomlevel;
-	NSPoint zoomPoint;
+
+@interface TransparentWindow : NSWindow {
 }
 
-- (void) toggleFollowCurrentApplication;
-- (void) frontApplicationSwitched;
-- (void) drawFrame;
-- (void) followCurrentApplication;
+- (void)setRect:(NSRect) aRect;
++ (TransparentWindow *) windowForMainScreen;
+
+@end
+
+@interface TransparentView : NSView {
+	NSRect rect;
+	NSRect oldRect;
+}
 
 @end

@@ -58,7 +58,7 @@ static void swizzleBitmap(void * data, int rowBytes, int height)
     base = data;
     buffer = malloc(rowBytes);
 	
-    while ( top < bottom )
+    while (top < bottom)
     {
         topP = (void *)((top * rowBytes) + (intptr_t)base);
         bottomP = (void *)((bottom * rowBytes) + (intptr_t)base);
@@ -72,14 +72,14 @@ static void swizzleBitmap(void * data, int rowBytes, int height)
 		 bcopy()
 		 * calls with your own custom pixel reformatter.
 		 */
-        bcopy( topP, buffer, rowBytes );
-        bcopy( bottomP, topP, rowBytes );
-        bcopy( buffer, bottomP, rowBytes );
+        bcopy(topP, buffer, rowBytes);
+        bcopy(bottomP, topP, rowBytes);
+        bcopy(buffer, bottomP, rowBytes);
 		
         ++top;
         --bottom;
     }
-    free( buffer );
+    free(buffer);
 }
 
 /*
@@ -121,27 +121,26 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
         0
     } ;
 	
-    if ( display == kCGNullDirectDisplay )
+    if (display == kCGNullDirectDisplay)
         display = CGMainDisplayID();
     attribs[2] = CGDisplayIDToOpenGLDisplayMask(display);
 	
     /* Build a full-screen GL context */
-    CGLChoosePixelFormat( attribs, &pixelFormatObj, &numPixelFormats );
-    if ( pixelFormatObj == NULL ) {
+    CGLChoosePixelFormat(attribs, &pixelFormatObj, &numPixelFormats);
+    if (pixelFormatObj == NULL) {
 		CFRelease(cSpace);
 		// No full screen context support
         return NULL;
 	}
-    CGLCreateContext( pixelFormatObj, NULL, &glContextObj ) ;
-    CGLDestroyPixelFormat( pixelFormatObj ) ;
-    if ( glContextObj == NULL ) {
+    CGLCreateContext(pixelFormatObj, NULL, &glContextObj);
+    CGLDestroyPixelFormat(pixelFormatObj);
+    if (glContextObj == NULL) {
 		CFRelease(cSpace);
         return NULL;
 	}
 	
-    CGLSetCurrentContext( glContextObj ) ;
-    CGLSetFullScreen( glContextObj ) ;
-	//CGLSetFullScreenOnDisplay(glContextObj, 0);
+	CGLSetCurrentContext(glContextObj);
+	CGLSetFullScreen(glContextObj);
 	
 	
     glReadBuffer(GL_FRONT);
@@ -158,9 +157,9 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     if ( data == NULL )
     {
 		CFRelease(cSpace);
-        CGLSetCurrentContext( NULL );
-        CGLClearDrawable( glContextObj );    // disassociate from full screen
-        CGLDestroyContext( glContextObj );    // and destroy the context
+        CGLSetCurrentContext(NULL);
+        CGLClearDrawable(glContextObj);    // disassociate from full screen
+        CGLDestroyContext(glContextObj);    // and destroy the context
         return NULL;
     }
     bitmap = CGBitmapContextCreate(data, width, height, 8, bytewidth,
@@ -207,9 +206,9 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     free(data);
 	
     /* Get rid of GL context */
-    CGLSetCurrentContext( NULL );
-    CGLClearDrawable( glContextObj );    // disassociate from full screen
-    CGLDestroyContext( glContextObj );    // and destroy the context
+    CGLSetCurrentContext(NULL);
+    CGLClearDrawable(glContextObj);    // disassociate from full screen
+    CGLDestroyContext(glContextObj);    // and destroy the context
 	
     /* Returned image has a reference count of 1 */
     return image;

@@ -11,6 +11,7 @@
 		2002DEB411FF8107005F44A0 /* capture.m in Sources */ = {isa = PBXBuildFile; fileRef = 2002DEB311FF8107005F44A0 /* capture.m */; };
 		2002DECF11FF8306005F44A0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2002DECE11FF8306005F44A0 /* OpenGL.framework */; };
 		201A038A11FFEA7100203662 /* Desktop.png in Resources */ = {isa = PBXBuildFile; fileRef = 201A038911FFEA7100203662 /* Desktop.png */; };
+		202C5FB112112C14003312D2 /* TransparentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 202C5FB012112C14003312D2 /* TransparentWindow.m */; };
 		209E2507120145690048F286 /* ChangeLog.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 209E2506120145690048F286 /* ChangeLog.rtf */; };
 		20C2FE7C11FEB90800A1EC68 /* Mirror.icns in Resources */ = {isa = PBXBuildFile; fileRef = 20C2FE7B11FEB90800A1EC68 /* Mirror.icns */; };
 		20C2FEC411FEC63000A1EC68 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 20C2FEC311FEC63000A1EC68 /* Credits.rtf */; };
@@ -30,6 +31,8 @@
 		2002DEB311FF8107005F44A0 /* capture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = capture.m; sourceTree = "<group>"; };
 		2002DECE11FF8306005F44A0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		201A038911FFEA7100203662 /* Desktop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Desktop.png; sourceTree = "<group>"; };
+		202C5FAF12112C14003312D2 /* TransparentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentWindow.h; sourceTree = "<group>"; };
+		202C5FB012112C14003312D2 /* TransparentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentWindow.m; sourceTree = "<group>"; };
 		209E2506120145690048F286 /* ChangeLog.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = ChangeLog.rtf; sourceTree = "<group>"; };
 		20C2FE7B11FEB90800A1EC68 /* Mirror.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Mirror.icns; sourceTree = "<group>"; };
 		20C2FEC311FEC63000A1EC68 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -63,6 +66,8 @@
 			children = (
 				256AC3D80F4B6AC300CF3369 /* MirrorAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* MirrorAppDelegate.m */,
+				202C5FAF12112C14003312D2 /* TransparentWindow.h */,
+				202C5FB012112C14003312D2 /* TransparentWindow.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -203,6 +208,7 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* MirrorAppDelegate.m in Sources */,
 				2002DEB411FF8107005F44A0 /* capture.m in Sources */,
+				202C5FB112112C14003312D2 /* TransparentWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

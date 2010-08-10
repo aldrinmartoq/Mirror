@@ -30,6 +30,7 @@
 #import "MirrorAppDelegate.h"
 #import "capture.h"
 #import <Carbon/Carbon.h>
+#import "TransparentWindow.h"
 
 @implementation MirrorAppDelegate
 
@@ -103,13 +104,14 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 	NSPoint mousePos = [NSEvent mouseLocation];
 	NSUInteger mouseBut = [NSEvent pressedMouseButtons];
 	CGDirectDisplayID mainDisplay = CGMainDisplayID();
+	CGRect mainDisplayBounds = CGDisplayBounds(mainDisplay);
 	CGRect rect;
 	
 	// determine capture rect
 	if (follow && currentAppRect.size.width > 0 && currentAppRect.size.height > 0) {
 		rect = currentAppRect;
 	} else {
-		rect = CGDisplayBounds(mainDisplay);
+		rect = mainDisplayBounds;
 	}
 	
 	// zoom the capture rect
@@ -160,9 +162,17 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 		rect.origin.y = ay;
 		rect.size.width = w;
 		rect.size.height = h;
-		NSLog(@"ax:%4.0f ay:%4.0f bx:%4.0f by:%4.0f h:%4.0f y:%4.0f", ax, ay, bx, by, h, rect.origin.y);
 	}
 	
+	// update frame (and window if screen size change)
+	NSRect currentFrame = [transparentWindow frame];
+	if (!NSEqualRects(currentFrame, NSRectFromCGRect(mainDisplayBounds))) {
+		[transparentWindow release];
+		transparentWindow = [[TransparentWindow windowForMainScreen] retain];
+		[transparentWindow makeKeyAndOrderFront:self];
+	}
+	[transparentWindow setRect:NSRectFromCGRect(rect)];
+
 	// capture screen image via OpenGL
 	CGImageRef imageRef = grabViaOpenGL(mainDisplay, rect);
 	
@@ -195,14 +205,13 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 	}
 	
 	CGImageRelease(imageRef);
-	
 	if (follow) {
 		captureCounter++;
 		if (captureCounter > captureFrequency) {
 			captureCounter = 0;
 			[self followCurrentApplication];
 		}
-	}
+	}	
 }
 
 - (void) toggleFollowCurrentApplication {
@@ -539,7 +548,12 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 	[self applyChangesZoomlevel];
 	
 	// setup carbon delegate
-	appDelegate = self;	
+	appDelegate = self;
+	
+	transparentWindow = [[TransparentWindow windowForMainScreen] retain];
+	[transparentWindow makeKeyAndOrderFront:self];
+	
+	NSLog(@"Content view: %@", [transparentWindow contentView]);
 }
 
 @end
