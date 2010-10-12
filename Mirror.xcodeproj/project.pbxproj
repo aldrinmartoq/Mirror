@@ -10,6 +10,10 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		2002DEB411FF8107005F44A0 /* capture.m in Sources */ = {isa = PBXBuildFile; fileRef = 2002DEB311FF8107005F44A0 /* capture.m */; };
 		2002DECF11FF8306005F44A0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2002DECE11FF8306005F44A0 /* OpenGL.framework */; };
+		2006D7271263A6E100404186 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2006D7261263A6E100404186 /* Sparkle.framework */; };
+		2006D7441263A78400404186 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2006D7261263A6E100404186 /* Sparkle.framework */; };
+		2006D7611263AB0A00404186 /* appcast.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2006D7601263AB0A00404186 /* appcast.xml */; };
+		2006D7F71263CA2400404186 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 2006D7F61263CA2400404186 /* dsa_pub.pem */; };
 		201A038A11FFEA7100203662 /* Desktop.png in Resources */ = {isa = PBXBuildFile; fileRef = 201A038911FFEA7100203662 /* Desktop.png */; };
 		202C5FB112112C14003312D2 /* TransparentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 202C5FB012112C14003312D2 /* TransparentWindow.m */; };
 		209E2507120145690048F286 /* ChangeLog.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 209E2506120145690048F286 /* ChangeLog.rtf */; };
@@ -22,6 +26,19 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2006D7431263A77200404186 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2006D7441263A78400404186 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -30,6 +47,9 @@
 		2002DEB211FF8107005F44A0 /* capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capture.h; sourceTree = "<group>"; };
 		2002DEB311FF8107005F44A0 /* capture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = capture.m; sourceTree = "<group>"; };
 		2002DECE11FF8306005F44A0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		2006D7261263A6E100404186 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		2006D7601263AB0A00404186 /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
+		2006D7F61263CA2400404186 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		201A038911FFEA7100203662 /* Desktop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Desktop.png; sourceTree = "<group>"; };
 		202C5FAF12112C14003312D2 /* TransparentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentWindow.h; sourceTree = "<group>"; };
 		202C5FB012112C14003312D2 /* TransparentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentWindow.m; sourceTree = "<group>"; };
@@ -55,6 +75,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				2002DECF11FF8306005F44A0 /* OpenGL.framework in Frameworks */,
 				20CE33FB12009A7900C9BC05 /* Carbon.framework in Frameworks */,
+				2006D7271263A6E100404186 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +96,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2006D7261263A6E100404186 /* Sparkle.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				2002DECE11FF8306005F44A0 /* OpenGL.framework */,
 			);
@@ -102,6 +124,7 @@
 		29B97314FDCFA39411CA2CEA /* Mirror */ = {
 			isa = PBXGroup;
 			children = (
+				2006D7601263AB0A00404186 /* appcast.xml */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -126,6 +149,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2006D7F61263CA2400404186 /* dsa_pub.pem */,
 				201A038911FFEA7100203662 /* Desktop.png */,
 				20C2FE7B11FEB90800A1EC68 /* Mirror.icns */,
 				8D1107310486CEB800E47090 /* Mirror-Info.plist */,
@@ -156,6 +180,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				2006D7431263A77200404186 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -195,6 +220,8 @@
 				20C2FEC411FEC63000A1EC68 /* Credits.rtf in Resources */,
 				201A038A11FFEA7100203662 /* Desktop.png in Resources */,
 				209E2507120145690048F286 /* ChangeLog.rtf in Resources */,
+				2006D7611263AB0A00404186 /* appcast.xml in Resources */,
+				2006D7F71263CA2400404186 /* dsa_pub.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +266,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -258,6 +289,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Mirror_Prefix.pch;

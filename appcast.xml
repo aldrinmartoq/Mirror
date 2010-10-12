@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss
+	version="2.0"
+	xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"
+	xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+      <title>Mirror App Changelog</title>
+      <link>http://aldrin.martoq.cl/projects/app/mirror/appcast.xml</link>
+      <description>Most recent changes with links to updates.</description>
+      <language>en</language>
+         <item>
+            <title>Version 1.0.0 (First Public Release!)</title>
+						<sparkle:releaseNotesLink>http://aldrin.martoq.cl/projects/app/mirror/1.0.0.html</sparkle:releaseNotesLink>
+            <pubDate>Mon, 11 Oct 2010 17:56:00 +0000</pubDate>
+            <enclosure
+				url="http://aldrin.martoq.cl/projects/app/mirror/Mirror 1.0.0.zip"
+				sparkle:version="20101011.01"
+				sparkle:shortVersionString="1.0.0"
+				length="4620676"
+				type="application/octet-stream"
+				sparkle:dsaSignature="MC0CFG/XDZNMSbrBfa9DwCMS58d/NwGbAhUAzn+JOs6iLajGzxLz+3vhZUVQTN8=" />
+         </item>
+   </channel>
+</rss>

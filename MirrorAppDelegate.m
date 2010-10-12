@@ -447,8 +447,14 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 
 - (void) applyChangesFollow {
 	follow = [defaults boolForKey:@"follow"];
+	BOOL capture = [defaults boolForKey:@"capture"];
 	[self frontApplicationSwitched];
 	NSLog(@"follow: %d black list: %@", follow, blacklistedApps);
+	if (capture && follow) {
+		[transparentWindow makeKeyAndOrderFront:self];
+	} else {
+		[transparentWindow orderOut:self];
+	}
 }
 
 - (void) applyChangesBorder {
@@ -477,7 +483,11 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 	NSLog(@"capture: %d", capture);
 	if (capture) {
 		[self applyChangesFrequency];
+		if (follow) {
+			[transparentWindow makeKeyAndOrderFront:self];
+		}
 	} else {
+		[transparentWindow orderOut:self];
 		[captureTimer invalidate];
 		[captureTimer release];
 		captureTimer = nil;
@@ -525,7 +535,7 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 	NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 								 @"Mirror by @aldrinmartoq", @"text",
 								 @"30", @"border",
-								 @"NO", @"capture",
+								 @"YES", @"capture",
 								 @"1", @"frequency",
 								 @"NO", @"zoom",
 								 @"1.5", @"zoomlevel",
@@ -550,9 +560,7 @@ OSStatus appFrontSwitchedHandler(EventHandlerCallRef inHandlerRef, EventRef even
 	// setup carbon delegate
 	appDelegate = self;
 	
-	transparentWindow = [[TransparentWindow windowForMainScreen] retain];
-	[transparentWindow makeKeyAndOrderFront:self];
-	
+	transparentWindow = [[TransparentWindow windowForMainScreen] retain];	
 	NSLog(@"Content view: %@", [transparentWindow contentView]);
 }
 
